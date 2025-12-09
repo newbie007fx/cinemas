@@ -1,0 +1,239 @@
+{
+  "info": {
+    "name": "Cinemas API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for authenticating and performing CRUD operations on showtimes."
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login succeeded\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.is_success).to.eql(true);",
+                  "});",
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.data) {",
+                  "    if (jsonData.data.access_token) {",
+                  "        pm.environment.set('access_token', jsonData.data.access_token);",
+                  "    }",
+                  "    if (jsonData.data.refresh_token) {",
+                  "        pm.environment.set('refresh_token', jsonData.data.refresh_token);",
+                  "    }",
+                  "    if (jsonData.data.user && jsonData.data.user.id) {",
+                  "        pm.environment.set('user_id', jsonData.data.user.id);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Showtimes",
+      "item": [
+        {
+          "name": "List Showtimes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/showtimes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "showtimes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Showtime",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"theater_id\": {{theater_id}},\n    \"movie_id\": {{movie_id}},\n    \"show_date\": \"{{show_date}}\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\",\n    \"price\": {{ticket_price}}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/showtimes",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "showtimes"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Showtime created\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "    pm.environment.set('showtime_id', jsonData.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Showtime Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/showtimes/{{showtime_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "showtimes",
+                "{{showtime_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Showtime",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"theater_id\": {{theater_id}},\n    \"movie_id\": {{movie_id}},\n    \"show_date\": \"{{show_date}}\",\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\",\n    \"price\": {{ticket_price}}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/showtimes/{{showtime_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "showtimes",
+                "{{showtime_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Showtime",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/showtimes/{{showtime_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "showtimes",
+                "{{showtime_id}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Showtime deleted\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.environment.unset('showtime_id');"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
