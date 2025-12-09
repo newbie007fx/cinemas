@@ -1,0 +1,35 @@
+app:
+  env: "local"
+  log_level: "INFO"
+
+server:
+  port: "8183"
+
+cors_config:
+  allowed_headers:
+    - "api-key"
+    - "authorization"
+    - "correlation-id"
+    - "idempotency-key"
+    - "Origin"
+    - "Content-Type"
+    - "X-Auth-Token"
+  allowed_origins:
+    - "*"
+  allowed_methods:
+    - "GET"
+    - "HEAD"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+    - "OPTIONS"
+
+database:
+  host: localhost
+  port: 5432
+  user: root
+  password: root
+  name: cinemas
+
+jwt:
+  secret: "cobaajainidul"

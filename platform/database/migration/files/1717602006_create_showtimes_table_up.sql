@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS showtimes (
+  id SERIAL PRIMARY KEY,
+  theater_id INT NOT NULL REFERENCES theaters(id) ON DELETE CASCADE,
+  movie_id INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
+  show_date DATE NOT NULL,
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  price NUMERIC(10, 2) NOT NULL
+);

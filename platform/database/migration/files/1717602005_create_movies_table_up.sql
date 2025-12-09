@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS movies (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(50) NOT NULL,
+  sinopsis VARCHAR(255),
+  status VARCHAR(10) NOT NULL
+);

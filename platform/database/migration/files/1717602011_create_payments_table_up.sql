@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS payments (
+  id SERIAL PRIMARY KEY,
+  order_id INT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  amount NUMERIC(10, 2) NOT NULL,
+  status VARCHAR(20) NOT NULL,
+  payment_channel VARCHAR(20) NOT NULL,
+  note VARCHAR(200)
+);

@@ -1,0 +1,12 @@
+Alur Pemesanan Tiket Bioskop: Pemilihan tempat duduk
+- untuk menghandle restok tempat duduk disini saya menggunakan table tersendiri yaitu seat inventory. seat inventory berisi daftar semua seat yang terdapat pada suatu showtimes. seat inventory mempunyai field status untuk menandai status dari seat tersebut apakah availaible, hold/reserved atau sold. 
+- untuk mengatasi agar satu seat tidak bisa dipesan oleh lebih dari satu orang disini saya menerapkan optimistic locking dengan menggunakan field version.
+flownya adalalh sebagai berikut:
+1. ketika admin membuat show times, otomatis sistem akan membuat seat inventory untuk semua seat yang berada pada theather yang digunakan pada showtimes tersebut. default dari seat inventory adalah availaible. 
+2. ketika user ingin memesan suatu kursi pada showtimes, sistem akan melakukan mengambil data status, reserved until dan version. jika status = available atau status = reseverd dengan reserved until < waktu saat ini. maka proses bisa dilanjutkan. sistem akan melakukan hold seat dengan merubah status menjadi reserved dan reserved until = waktu saat ini + 7 menit. proses tersebuth memiliki kondisi, dimana versionnya harus sama dengan version yang sebelumnya didapat. jika update memiliki row affected 0 itu berarti version telah berubah (ada pengguna lain yang lebih dulu mendapatkan kursi) maka sistem akan mengembalikan seat tidak tersedia.
+
+Alur Refund/pembatalan:
+1. pembatalan dilakukan oleh admin dari halaman showtimes.
+2. ketika showtimes dibatalkan, sistem akan mengubah semua transaksi yang telah paid menjadi cancel.
+3. untuk setiap transaksi yang cancel, user dapat melakukan pengajuan refund dengan mengisi data refund.
+4. sistem kemudian akan membuat refund dan memprosesnya. jika sukses maka status berubah menjadi sukses, jika gagal maka status menajdi failed, dan user dapat melakukan refund ulang setelah meberikan data yang valid. 
